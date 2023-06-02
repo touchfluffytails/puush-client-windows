@@ -20,7 +20,7 @@ namespace puush
     {
         internal static pConfigManager config;
 
-        public const int INTERNAL_VERSION = 93;
+        public const int INTERNAL_VERSION = 101;
         internal static bool RecoveringFromError;
 
         /// <summary>The GetForegroundWindow function returns a handle to the foreground window.</summary>
@@ -130,7 +130,7 @@ namespace puush
 
             SetStartupBehaviour();
 
-            UpdateManager.SetupTimedChecks();
+            // UpdateManager.SetupTimedChecks();
 
             TimedStuff();
 
@@ -372,6 +372,11 @@ namespace puush
 
         public static bool EnsureLogin()
         {
+			if (!puush.config.GetValue<bool>("uploadtointernet", true))
+			{
+				return true;
+			}
+
             if (!IsLoggedIn)
             {
                 Settings.ShowPreferences();

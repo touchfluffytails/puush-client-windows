@@ -116,8 +116,9 @@ namespace puush
                 checkBoxSound.Checked = puush.config.GetValue<bool>("notificationsound", true);
                 checkBoxClipboard.Checked = puush.config.GetValue<bool>("copytoclipboard", true);
                 checkBoxStartup.Checked = puush.config.GetValue<bool>("startup", true);
+				checkBoxUpload.Checked = puush.config.GetValue<bool>("uploadtointernet", true);
 
-                checkBoxContextMenu.Checked = puush.config.GetValue<bool>("contextmenu", true);
+				checkBoxContextMenu.Checked = puush.config.GetValue<bool>("contextmenu", true);
 
                 labelLastUpdate.Text = puush.config.GetValue<string>("lastupdate", "Never");
 
@@ -444,5 +445,11 @@ namespace puush
         {
             puush.config.SetValue<bool>("selectionrectangle", !checkBoxSelectionRectangle.Checked);
         }
+
+		private void checkBoxUpload_CheckedChanged(object sender, EventArgs e)
+		{
+			puush.config.SetValue<bool>("uploadtointernet", checkBoxUpload.Checked);
+
+		}
     }
 }

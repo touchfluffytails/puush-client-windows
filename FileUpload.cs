@@ -10,6 +10,8 @@ using puush.Properties;
 using System.Drawing;
 using osu_common.Helpers;
 using System.Drawing.Imaging;
+using System.Collections.Specialized;
+using System.Windows.Forms;
 
 namespace puush
 {
@@ -53,6 +55,11 @@ namespace puush
 
         internal static void Upload(string filename)
         {
+			if (!puush.config.GetValue<bool>("uploadtointernet", true))
+			{
+				return;
+			}
+
             byte[] fileBytes = null;
 
             try
@@ -87,6 +94,12 @@ namespace puush
 
         internal static void Upload(byte[] p, string filename)
         {
+			if (!puush.config.GetValue<bool>("uploadtointernet", true))
+			{
+				CopyImageToClipboard(p, filename);
+				return;
+			}
+
             //check whether we have enough account quota...
             if (puush.config.GetValue<int>("type", 0) == 0)
             {
@@ -339,7 +352,10 @@ namespace puush
 
         internal static void UploadImage(Bitmap b, string filename)
         {
-            if (!puush.EnsureLogin()) return;
+			if (!puush.EnsureLogin())
+			{
+				return;
+			}
 
             filename += string.Format(" ({0:yyyy-MM-dd} at {0:hh.mm.ss})", DateTime.Now);
 
@@ -432,5 +448,31 @@ namespace puush
             if (image != null)
                 FileUpload.Upload(image, filename);
         }
-    }
+
+		internal static void CopyImageToClipboard(byte[] image, string filename)
+		{
+			if (puush.config.GetValue<bool>("saveimages", false))
+			{
+				CopyImageToClipboard(filename);
+			}
+			else
+			{
+				CopyImageToClipboard(image);
+			}
+		}
+
+		internal static void CopyImageToClipboard(string filename)
+		{
+			string filepath = Path.Combine(puush.config.GetValue<string>("saveimagepath", ""), filename);
+			Clipboard.SetFileDropList(new StringCollection() { filepath });
+		}
+
+		internal static void CopyImageToClipboard(byte[] image)
+		{
+			using (MemoryStream ms = new MemoryStream(image))
+			{
+				Clipboard.SetImage(Image.FromStream(ms, true));
+			}
+		}
+	}
 }

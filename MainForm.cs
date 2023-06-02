@@ -25,51 +25,57 @@ namespace puush
 
         public static DockedPanel panel;
 
-        public MainForm()
-        {
-            InitializeComponent();
-            Instance = this;
+		public MainForm()
+		{
+			InitializeComponent();
+			Instance = this;
 
-            Visible = false;
-            Hide();
+			Visible = false;
+			Hide();
 
-            //TopMost = true;
-            Icon = Resources.iconbundle;
+			//TopMost = true;
+			Icon = Resources.iconbundle;
 
-            trayIcon.BalloonTipClicked += new EventHandler(trayIcon_BalloonTipClicked);
+			trayIcon.BalloonTipClicked += new EventHandler(trayIcon_BalloonTipClicked);
 
-            toolStripMenuItemUploadDisabled.Checked = puush.config.GetValue<bool>("disableupload", false);
+			toolStripMenuItemUploadDisabled.Checked = puush.config.GetValue<bool>("disableupload", false);
 
-            toolStripMenuItemVersion.Text = string.Format("puush r{0}", puush.INTERNAL_VERSION);
+			toolStripMenuItemVersion.Text = string.Format("puush r{0}", puush.INTERNAL_VERSION);
 
-            BindingManager.Bind();
+			BindingManager.Bind();
 
-            if (!puush.IsLoggedIn)
-            {
-                QuickStart = new QuickStart();
-                QuickStart.Show(this);
-            }
-            else
-            {
-                Settings.UpdateAccountDetails();
-            }
+			if (puush.config.GetValue<bool>("uploadtointernet", true))
+			{
+				if (!puush.IsLoggedIn)
+				{
+					QuickStart = new QuickStart();
+					QuickStart.Show(this);
+				}
+				else
+				{
+					Settings.UpdateAccountDetails();
+				}
+			}
 
-            if (puush.config.GetValue<bool>("Experimental", false))
-                panel = new DockedPanel();
+			if (puush.config.GetValue<bool>("Experimental", false))
+				panel = new DockedPanel();
 
-            try
-            {
-                if (File.Exists("puush-old.exe"))
-                {
-                    MainForm.Instance.trayIcon.ShowBalloonTip(5000, "puush was updated!", "You are now running " + toolStripMenuItemVersion.Text + "!", ToolTipIcon.Info);
-                    MainForm.Instance.trayIcon.Tag = null;
-                }
+			try
+			{
+				if (File.Exists("puush-old.exe"))
+				{
+					MainForm.Instance.trayIcon.ShowBalloonTip(5000, "puush was updated!", "You are now running " + toolStripMenuItemVersion.Text + "!", ToolTipIcon.Info);
+					MainForm.Instance.trayIcon.Tag = null;
+				}
 
-                File.Delete("puush-old.exe");
-            }
-            catch { }
+				File.Delete("puush-old.exe");
+			}
+			catch { }
 
-            HistoryManager.Update();
+			if (puush.config.GetValue<bool>("uploadtointernet", true))
+			{ 
+				HistoryManager.Update();
+			}
 
             if (puush.RecoveringFromError)
                 puush.ShowErrorBalloon("This has been reported automatically.\nSorry for any inconvenience", "puush has just recovered from an error.");

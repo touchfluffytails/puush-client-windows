@@ -91,7 +91,7 @@ namespace puush
             InitializeComponent();
 
             ReloadConfig();
-        }
+		}
 
         /// <summary>
         /// Some toggles in reloading config cause events to be triggered.  We don't want to end up reloading more than we need to.
@@ -165,6 +165,9 @@ namespace puush
 
 				comboBoxClipboardBehaviour.DataSource = Enum.GetValues(typeof(ClipboardBehaviour));
 				comboBoxClipboardBehaviour.SelectedItem = (ClipboardBehaviour)puush.config.GetValue<int>("clipboardbehaviour", (int)ClipboardBehaviour.Image);
+
+				listBoxServers.Items.Clear();
+				listBoxServers.Items.AddRange(puush.config.GetArrayValue<string[]>("servers", new string[] { puush.getApiUrl("") }));
 
 				isReloading = false;
             });
@@ -481,6 +484,119 @@ namespace puush
 			}
 
 			puush.config.SetValue<int>("clipboardbehaviour", (int)selectedBehaviour);
+		}
+
+		private void buttonServersAdd_Click(object sender, EventArgs e)
+		{
+			string newServer = textBoxServers.Text;
+
+			if (newServer == string.Empty)
+			{
+				return;
+			}
+
+			if (listBoxServers.Items.Contains(newServer))
+			{
+				if (selectedServerEdit != string.Empty)
+				{
+					textBoxServers.Text = string.Empty;
+					selectedServerEdit = string.Empty;
+
+					buttonServersCancel.Enabled = false;
+					buttonServersDelete.Enabled = true;
+					buttonServersEdit.Enabled = true;
+				}
+
+				return;
+			}
+
+			// Why should I even bother validating here? Just don't get it wrong
+
+
+			string[] servers;
+			if (selectedServerEdit != string.Empty)
+			{
+				servers = new string[listBoxServers.Items.Count];
+
+				int index = listBoxServers.Items.IndexOf(selectedServerEdit);
+				listBoxServers.Items[index] = newServer;
+
+				buttonServersCancel.Enabled = false;
+				buttonServersDelete.Enabled = true;
+				buttonServersEdit.Enabled = true;
+			}
+			else
+			{
+				servers = new string[listBoxServers.Items.Count + 1];
+
+			}
+
+			for (int i = 0; i < listBoxServers.Items.Count; i++)
+			{
+				servers[i] = listBoxServers.Items[i].ToString();
+			}
+
+			if (selectedServerEdit == string.Empty)
+			{
+				listBoxServers.Items.Add(newServer);
+				servers[servers.Length - 1] = newServer;
+				selectedServerEdit = string.Empty;
+			}
+
+			puush.config.SetArrayValue<string[]>("servers", servers);
+			textBoxServers.Text = string.Empty;
+		}
+
+		private void buttonServersDelete_Click(object sender, EventArgs e)
+		{
+			string message = $"Are you sure you want to delete the server:\n\n{(string)listBoxServers.SelectedItem}";
+			DialogResult result = MessageBox.Show(this, message, "Delete Server?", MessageBoxButtons.YesNo, MessageBoxIcon.Question, MessageBoxDefaultButton.Button2);
+			if (result == DialogResult.No)
+			{
+				return;
+			}
+
+			string selectedServer = listBoxServers.SelectedItem.ToString();
+
+			listBoxServers.Items.Remove(selectedServer);
+
+			string[] servers;
+			if (listBoxServers.Items.Count == 0) 
+			{
+				servers= new string[0];
+			}
+			else
+			{
+				servers = new string[listBoxServers.Items.Count - 1];
+			}
+
+			for (int i = 0; i < listBoxServers.Items.Count - 1; i++)
+			{
+				servers[i] = listBoxServers.Items[i].ToString();
+			}
+
+			puush.config.SetArrayValue<string[]>("servers", servers);
+		}
+
+		private string selectedServerEdit = string.Empty;
+		private void buttonServersEdit_Click(object sender, EventArgs e)
+		{
+			textBoxServers.Text = listBoxServers.SelectedItem.ToString();
+			selectedServerEdit = listBoxServers.SelectedItem.ToString();
+
+			buttonServersCancel.Enabled = true;
+			buttonServersDelete.Enabled = false;
+			buttonServersEdit.Enabled = false;
+		}
+
+		private void buttonServersCancel_Click(object sender, EventArgs e)
+		{
+			textBoxServers.Text = string.Empty;
+			selectedServerEdit = string.Empty;
+
+			buttonServersCancel.Enabled = false;
+			buttonServersDelete.Enabled = true;
+			buttonServersEdit.Enabled = true;
 		}
 	}
 }

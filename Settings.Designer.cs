@@ -106,9 +106,16 @@ namespace puush
 			this.qualityHigh = new System.Windows.Forms.RadioButton();
 			this.qualityBest = new System.Windows.Forms.RadioButton();
 			this.tabPage6 = new System.Windows.Forms.TabPage();
+			this.groupBox10 = new System.Windows.Forms.GroupBox();
+			this.buttonServersDelete = new System.Windows.Forms.Button();
+			this.buttonServersEdit = new System.Windows.Forms.Button();
+			this.buttonServersAdd = new System.Windows.Forms.Button();
+			this.textBoxServers = new System.Windows.Forms.TextBox();
+			this.listBoxServers = new System.Windows.Forms.ListBox();
 			this.groupBox9 = new System.Windows.Forms.GroupBox();
 			this.checkBoxUpload = new System.Windows.Forms.CheckBox();
 			this.folderBrowserDialog1 = new System.Windows.Forms.FolderBrowserDialog();
+			this.buttonServersCancel = new System.Windows.Forms.Button();
 			this.tabControl1.SuspendLayout();
 			this.tabPage1.SuspendLayout();
 			this.groupBox3.SuspendLayout();
@@ -128,6 +135,7 @@ namespace puush
 			this.groupBox6.SuspendLayout();
 			this.groupBox5.SuspendLayout();
 			this.tabPage6.SuspendLayout();
+			this.groupBox10.SuspendLayout();
 			this.groupBox9.SuspendLayout();
 			this.SuspendLayout();
 			// 
@@ -924,6 +932,7 @@ namespace puush
 			// 
 			// tabPage6
 			// 
+			this.tabPage6.Controls.Add(this.groupBox10);
 			this.tabPage6.Controls.Add(this.groupBox9);
 			this.tabPage6.Location = new System.Drawing.Point(4, 22);
 			this.tabPage6.Name = "tabPage6";
@@ -932,6 +941,66 @@ namespace puush
 			this.tabPage6.TabIndex = 5;
 			this.tabPage6.Text = "Network";
 			this.tabPage6.UseVisualStyleBackColor = true;
+			// 
+			// groupBox10
+			// 
+			this.groupBox10.Controls.Add(this.buttonServersCancel);
+			this.groupBox10.Controls.Add(this.buttonServersDelete);
+			this.groupBox10.Controls.Add(this.buttonServersEdit);
+			this.groupBox10.Controls.Add(this.buttonServersAdd);
+			this.groupBox10.Controls.Add(this.textBoxServers);
+			this.groupBox10.Controls.Add(this.listBoxServers);
+			this.groupBox10.Location = new System.Drawing.Point(6, 72);
+			this.groupBox10.Name = "groupBox10";
+			this.groupBox10.Size = new System.Drawing.Size(448, 163);
+			this.groupBox10.TabIndex = 8;
+			this.groupBox10.TabStop = false;
+			this.groupBox10.Text = "Servers";
+			// 
+			// buttonServersDelete
+			// 
+			this.buttonServersDelete.Location = new System.Drawing.Point(367, 109);
+			this.buttonServersDelete.Name = "buttonServersDelete";
+			this.buttonServersDelete.Size = new System.Drawing.Size(75, 23);
+			this.buttonServersDelete.TabIndex = 11;
+			this.buttonServersDelete.Text = "Delete";
+			this.buttonServersDelete.UseVisualStyleBackColor = true;
+			this.buttonServersDelete.Click += new System.EventHandler(this.buttonServersDelete_Click);
+			// 
+			// buttonServersEdit
+			// 
+			this.buttonServersEdit.Location = new System.Drawing.Point(367, 51);
+			this.buttonServersEdit.Name = "buttonServersEdit";
+			this.buttonServersEdit.Size = new System.Drawing.Size(75, 23);
+			this.buttonServersEdit.TabIndex = 10;
+			this.buttonServersEdit.Text = "Edit";
+			this.buttonServersEdit.UseVisualStyleBackColor = true;
+			this.buttonServersEdit.Click += new System.EventHandler(this.buttonServersEdit_Click);
+			// 
+			// buttonServersAdd
+			// 
+			this.buttonServersAdd.Location = new System.Drawing.Point(367, 21);
+			this.buttonServersAdd.Name = "buttonServersAdd";
+			this.buttonServersAdd.Size = new System.Drawing.Size(75, 23);
+			this.buttonServersAdd.TabIndex = 9;
+			this.buttonServersAdd.Text = "Add";
+			this.buttonServersAdd.UseVisualStyleBackColor = true;
+			this.buttonServersAdd.Click += new System.EventHandler(this.buttonServersAdd_Click);
+			// 
+			// textBoxServers
+			// 
+			this.textBoxServers.Location = new System.Drawing.Point(6, 22);
+			this.textBoxServers.Name = "textBoxServers";
+			this.textBoxServers.Size = new System.Drawing.Size(355, 20);
+			this.textBoxServers.TabIndex = 8;
+			// 
+			// listBoxServers
+			// 
+			this.listBoxServers.FormattingEnabled = true;
+			this.listBoxServers.Location = new System.Drawing.Point(6, 51);
+			this.listBoxServers.Name = "listBoxServers";
+			this.listBoxServers.Size = new System.Drawing.Size(355, 95);
+			this.listBoxServers.TabIndex = 7;
 			// 
 			// groupBox9
 			// 
@@ -953,6 +1022,17 @@ namespace puush
 			this.checkBoxUpload.Text = "Upload to internet";
 			this.checkBoxUpload.UseVisualStyleBackColor = true;
 			this.checkBoxUpload.CheckedChanged += new System.EventHandler(this.checkBoxUpload_CheckedChanged);
+			// 
+			// buttonServersCancel
+			// 
+			this.buttonServersCancel.Enabled = false;
+			this.buttonServersCancel.Location = new System.Drawing.Point(367, 80);
+			this.buttonServersCancel.Name = "buttonServersCancel";
+			this.buttonServersCancel.Size = new System.Drawing.Size(75, 23);
+			this.buttonServersCancel.TabIndex = 12;
+			this.buttonServersCancel.Text = "Cancel";
+			this.buttonServersCancel.UseVisualStyleBackColor = true;
+			this.buttonServersCancel.Click += new System.EventHandler(this.buttonServersCancel_Click);
 			// 
 			// Settings
 			// 
@@ -1001,6 +1081,8 @@ namespace puush
 			this.groupBox5.ResumeLayout(false);
 			this.groupBox5.PerformLayout();
 			this.tabPage6.ResumeLayout(false);
+			this.groupBox10.ResumeLayout(false);
+			this.groupBox10.PerformLayout();
 			this.groupBox9.ResumeLayout(false);
 			this.groupBox9.PerformLayout();
 			this.ResumeLayout(false);
@@ -1088,5 +1170,12 @@ namespace puush
 		private System.Windows.Forms.TabPage tabPage6;
 		private System.Windows.Forms.GroupBox groupBox9;
 		private System.Windows.Forms.CheckBox checkBoxUpload;
+		private System.Windows.Forms.GroupBox groupBox10;
+		private System.Windows.Forms.Button buttonServersEdit;
+		private System.Windows.Forms.Button buttonServersAdd;
+		private System.Windows.Forms.TextBox textBoxServers;
+		private System.Windows.Forms.ListBox listBoxServers;
+		private System.Windows.Forms.Button buttonServersDelete;
+		private System.Windows.Forms.Button buttonServersCancel;
 	}
 }

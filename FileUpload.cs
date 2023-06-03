@@ -111,20 +111,23 @@ namespace puush
 
             puush.UploadCancellable = true;
 
-            FileUploadNetRequest fileUpload = new FileUploadNetRequest(puush.getApiUrl("up"), p, filename, "f");
-            fileUpload.request.Items.AddFormField("k", puush.config.GetValue<string>("key", ""));
-            fileUpload.request.Items.AddFormField("c", CryptoHelper.GetMd5String(p));
-            fileUpload.request.Items.AddFormField("z", "poop");
-            fileUpload.onFinish += new FileUploadNetRequest.RequestCompleteHandler(fileUpload_onFinish);
-            fileUpload.onUpdate += new NetRequest.RequestUpdateHandler(fileUpload_onUpdate);
+			string[] servers = puush.config.GetArrayValue<string[]>("servers", new string[] { puush.getApiUrl("") });
+			for (int i = 0; i < servers.Length; i++)
+			{
+				FileUploadNetRequest fileUpload = new FileUploadNetRequest($"{servers[i]}up", p, filename, "f");
+				fileUpload.request.Items.AddFormField("k", puush.config.GetValue<string>("key", ""));
+				fileUpload.request.Items.AddFormField("c", CryptoHelper.GetMd5String(p));
+				fileUpload.request.Items.AddFormField("z", "poop");
+				fileUpload.onFinish += new FileUploadNetRequest.RequestCompleteHandler(fileUpload_onFinish);
+				fileUpload.onUpdate += new NetRequest.RequestUpdateHandler(fileUpload_onUpdate);
 
-            lock (PendingUploads)
-            {
-                PendingUploads.Enqueue(fileUpload);
-                if (MainForm.panel != null) MainForm.panel.StartUpload(fileUpload);
-                ProcessQueue();
-            }
-
+				lock (PendingUploads)
+				{
+					PendingUploads.Enqueue(fileUpload);
+					if (MainForm.panel != null) MainForm.panel.StartUpload(fileUpload);
+					ProcessQueue();
+				}
+			}
         }
 
         private static void ProcessQueue()

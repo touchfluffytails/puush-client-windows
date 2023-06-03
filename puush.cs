@@ -43,98 +43,98 @@ namespace puush
             return getPuushUrl("api/" + action);
         }
 
-        /// <summary>
-        /// The main entry point for the application.
-        /// </summary>
-        [STAThreadAttribute]
-        static void Main()
-        {
+		/// <summary>
+		/// The main entry point for the application.
+		/// </summary>
+		[STAThreadAttribute]
+		static void Main()
+		{
 #if !DEBUG
             AppDomain.CurrentDomain.UnhandledException += CurrentDomain_UnhandledException;
 #endif
 
-            Environment.CurrentDirectory = Path.GetDirectoryName(Application.ExecutablePath);
+			Environment.CurrentDirectory = Path.GetDirectoryName(Application.ExecutablePath);
 
-            string[] args = Environment.GetCommandLineArgs();
+			string[] args = Environment.GetCommandLineArgs();
 
-            //make sure we have an appdata folder
-            string folderName = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\puush";
+			//make sure we have an appdata folder
+			string folderName = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\puush";
 
-            config = new pConfigManager(folderName + "\\puush.ini");
-            config.WriteOnChange = true;
+			config = new pConfigManager(folderName + "\\puush.ini");
+			config.WriteOnChange = true;
 
-            if (args.Length > 1)
-            {
-                switch (args[1])
-                {
-                    case "-setPermissions":
-                        IsRunningElevated = true;
-                        SetPermissions();
-                        return;
-                    case "-removeContext":
-                        IsRunningElevated = true;
-                        SetPermissions();
-                        ContextMenuHandler.Remove();
-                        return;
-                    case "-update":
-                        CompleteUpdate();
-                        return;
-                    case "-ohnoes":
-                        RecoveringFromError = true;
+			if (args.Length > 1)
+			{
+				switch (args[1])
+				{
+					case "-setPermissions":
+						IsRunningElevated = true;
+						SetPermissions();
+						return;
+					case "-removeContext":
+						IsRunningElevated = true;
+						SetPermissions();
+						ContextMenuHandler.Remove();
+						return;
+					case "-update":
+						CompleteUpdate();
+						return;
+					case "-ohnoes":
+						RecoveringFromError = true;
 
-                        MainForm.threadMeSome(delegate
-                        {
-                            Thread.Sleep(30000);
-                            RecoveringFromError = false;
-                        });
-                        break;
-                    case "-upload":
-                        string filename = string.Empty;
+						MainForm.threadMeSome(delegate
+						{
+							Thread.Sleep(30000);
+							RecoveringFromError = false;
+						});
+						break;
+					case "-upload":
+						string filename = string.Empty;
 
-                        for (int i = 2; i < args.Length; i++)
-                            filename += " " + args[i];
+						for (int i = 2; i < args.Length; i++)
+							filename += " " + args[i];
 
-                        filename = filename.Trim();
+						filename = filename.Trim();
 
-                        try
-                        {
-                            IPC.LoadFile(filename);
-                            return;
-                        }
-                        catch (Exception e)
-                        {
-                            //maybe puush isn't started?
-                            new Thread(() =>
-                            {
-                                Thread.Sleep(2000);
-                                FileUpload.Upload(filename);
+						try
+						{
+							IPC.LoadFile(filename);
+							return;
+						}
+						catch (Exception e)
+						{
+							//maybe puush isn't started?
+							new Thread(() =>
+							{
+								Thread.Sleep(2000);
+								FileUpload.Upload(filename);
 
-                            }).Start();
-                        }
-                        break;
-                }
-            }
+							}).Start();
+						}
+						break;
+				}
+			}
 
-            EnsureFirstInstance();
+			EnsureFirstInstance();
 
-            IPC.AcceptConnections();
+			IPC.AcceptConnections();
 
-            if (!Directory.Exists(folderName))
-                Directory.CreateDirectory(folderName);
+			if (!Directory.Exists(folderName))
+				Directory.CreateDirectory(folderName);
 
-            if (puush.config.GetValue<bool>("contextmenu", true))
-                ContextMenuHandler.Install();
+			if (puush.config.GetValue<bool>("contextmenu", true))
+				ContextMenuHandler.Install();
 
-            Application.EnableVisualStyles();
-            Application.SetCompatibleTextRenderingDefault(false);
+			Application.EnableVisualStyles();
+			Application.SetCompatibleTextRenderingDefault(false);
 
-            SetStartupBehaviour();
+			SetStartupBehaviour();
 
-            // UpdateManager.SetupTimedChecks();
+			// UpdateManager.SetupTimedChecks();
 
-            TimedStuff();
+			TimedStuff();
 
-            Application.Run(new MainForm());
+			Application.Run(new MainForm());
 
             try
             {

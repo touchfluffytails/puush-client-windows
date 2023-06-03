@@ -1,7 +1,11 @@
-﻿using System;
+﻿using puush;
+using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using System.Windows.Forms;
+using System.Windows.Forms.VisualStyles;
 
 namespace osu_common.Helpers
 {
@@ -74,7 +78,7 @@ namespace osu_common.Helpers
                 case "String":
                     obj = raw;
                     break;
-            }
+			}
 
             entriesParsed[key] = obj;
             entriesRaw[key] = raw;
@@ -82,7 +86,79 @@ namespace osu_common.Helpers
             return (T) obj;
         }
 
-        public void SetValue<T>(string key, T value)
+		public T GetArrayValue<T>(string key, System.Collections.IList defaultValue)
+		{
+			object obj;
+
+			if (entriesParsed.TryGetValue(key, out obj))
+				return (T)obj;
+
+			string raw;
+			if (!entriesRaw.TryGetValue(key, out raw))
+			{
+				//If we don't have a value, we should set the default to be written back to the config file.
+				SetArrayValue<T>(key, defaultValue);
+				return (T)((object)defaultValue);
+			}
+
+			string ty = typeof(T).Name;
+			string[] strings = raw.Trim().Split(',');
+			switch (ty)
+			{
+				case "Int32[]":
+					int[] int32s = new int[strings.Length];
+					for (int i = 0; i < int32s.Length; i++)
+					{
+						int32s[i] = Int32.Parse(strings[i]);
+					}
+
+					obj = int32s;
+					break;
+				case "String[]":
+					string[] stringValues = new string[strings.Length];
+					bool emptyString = false;
+					int valid = 0;
+
+					for (int i = 0; i < strings.Length; i++)
+					{
+						if (strings[i].Trim() == string.Empty)
+						{
+							emptyString = true;
+						}
+						stringValues[i] = Uri.UnescapeDataString(strings[i]);
+						valid++;
+					}
+					
+					if (valid == 0)
+					{
+						stringValues = new string[0];
+					}
+					else if (emptyString)
+					{
+						stringValues = new string[valid];
+						for (int i = 0; i < strings.Length; i++)
+						{
+							if (strings[i].Trim() == string.Empty)
+							{
+								continue;
+							}
+							stringValues[i] = Uri.UnescapeDataString(strings[i]);
+						}
+					}
+
+					obj = stringValues;
+					break;
+				default:
+					break;
+			}
+
+			entriesParsed[key] = obj;
+			entriesRaw[key] = raw;
+
+			return (T)obj;
+		}
+
+		public void SetValue<T>(string key, T value)
         {
             switch (typeof(T).Name)
             {
@@ -105,7 +181,45 @@ namespace osu_common.Helpers
             
         }
 
-        public void LoadConfig()
+		public void SetArrayValue<T>(string key, System.Collections.IList value)
+		{
+			string stringsValue = string.Empty;
+			switch (typeof(T).Name)
+			{
+				case "String[]":
+					for (int i = 0; i < value.Count; i++)
+					{
+						stringsValue += Uri.EscapeDataString(((string[])value)[i]);
+						if (i < value.Count - 1)
+						{
+							stringsValue += ",";
+						}
+					}
+					break;
+				case "Int32[]":
+					for (int i = 0; i < value.Count; i++)
+					{
+						stringsValue += ((int[])value)[i].ToString();
+						if (i < value.Count - 1)
+						{
+							stringsValue += ",";
+						}
+					}
+					break;
+				default:
+					return;
+					break;
+			}
+
+			entriesRaw[key] = stringsValue;
+			entriesParsed[key] = value;
+
+			dirty = true;
+
+			if (WriteOnChange) SaveConfig();
+		}
+
+		public void LoadConfig()
         {
             LoadConfig("osu!Bancho.cfg");
         }

@@ -38,14 +38,14 @@ namespace puush
 			this.radioButton1 = new System.Windows.Forms.RadioButton();
 			this.label7 = new System.Windows.Forms.Label();
 			this.groupBox2 = new System.Windows.Forms.GroupBox();
-			this.checkBoxUpload = new System.Windows.Forms.CheckBox();
 			this.checkBoxStartup = new System.Windows.Forms.CheckBox();
 			this.groupBox1 = new System.Windows.Forms.GroupBox();
+			this.label19 = new System.Windows.Forms.Label();
 			this.panelSaveImage = new System.Windows.Forms.Panel();
 			this.button4 = new System.Windows.Forms.Button();
 			this.textBoxSaveLocation = new System.Windows.Forms.TextBox();
+			this.comboBoxClipboardBehaviour = new System.Windows.Forms.ComboBox();
 			this.checkBoxSaveImage = new System.Windows.Forms.CheckBox();
-			this.checkBoxClipboard = new System.Windows.Forms.CheckBox();
 			this.checkBoxBrowser = new System.Windows.Forms.CheckBox();
 			this.checkBoxSound = new System.Windows.Forms.CheckBox();
 			this.tabPage4 = new System.Windows.Forms.TabPage();
@@ -105,6 +105,9 @@ namespace puush
 			this.groupBox5 = new System.Windows.Forms.GroupBox();
 			this.qualityHigh = new System.Windows.Forms.RadioButton();
 			this.qualityBest = new System.Windows.Forms.RadioButton();
+			this.tabPage6 = new System.Windows.Forms.TabPage();
+			this.groupBox9 = new System.Windows.Forms.GroupBox();
+			this.checkBoxUpload = new System.Windows.Forms.CheckBox();
 			this.folderBrowserDialog1 = new System.Windows.Forms.FolderBrowserDialog();
 			this.tabControl1.SuspendLayout();
 			this.tabPage1.SuspendLayout();
@@ -124,6 +127,8 @@ namespace puush
 			this.groupBox7.SuspendLayout();
 			this.groupBox6.SuspendLayout();
 			this.groupBox5.SuspendLayout();
+			this.tabPage6.SuspendLayout();
+			this.groupBox9.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// tabControl1
@@ -133,6 +138,7 @@ namespace puush
 			this.tabControl1.Controls.Add(this.tabPage2);
 			this.tabControl1.Controls.Add(this.tabPage3);
 			this.tabControl1.Controls.Add(this.tabPage5);
+			this.tabControl1.Controls.Add(this.tabPage6);
 			this.tabControl1.Location = new System.Drawing.Point(12, 12);
 			this.tabControl1.Name = "tabControl1";
 			this.tabControl1.SelectedIndex = 0;
@@ -158,7 +164,7 @@ namespace puush
 			this.groupBox3.Controls.Add(this.radioButton2);
 			this.groupBox3.Controls.Add(this.radioButton1);
 			this.groupBox3.Controls.Add(this.label7);
-			this.groupBox3.Location = new System.Drawing.Point(6, 155);
+			this.groupBox3.Location = new System.Drawing.Point(6, 189);
 			this.groupBox3.Name = "groupBox3";
 			this.groupBox3.Size = new System.Drawing.Size(448, 117);
 			this.groupBox3.TabIndex = 4;
@@ -212,25 +218,13 @@ namespace puush
 			// 
 			// groupBox2
 			// 
-			this.groupBox2.Controls.Add(this.checkBoxUpload);
 			this.groupBox2.Controls.Add(this.checkBoxStartup);
 			this.groupBox2.Location = new System.Drawing.Point(6, 6);
 			this.groupBox2.Name = "groupBox2";
-			this.groupBox2.Size = new System.Drawing.Size(448, 50);
+			this.groupBox2.Size = new System.Drawing.Size(448, 47);
 			this.groupBox2.TabIndex = 3;
 			this.groupBox2.TabStop = false;
 			this.groupBox2.Text = "General Settings";
-			// 
-			// checkBoxUpload
-			// 
-			this.checkBoxUpload.AutoSize = true;
-			this.checkBoxUpload.Location = new System.Drawing.Point(223, 21);
-			this.checkBoxUpload.Name = "checkBoxUpload";
-			this.checkBoxUpload.Size = new System.Drawing.Size(122, 19);
-			this.checkBoxUpload.TabIndex = 4;
-			this.checkBoxUpload.Text = "Upload to internet";
-			this.checkBoxUpload.UseVisualStyleBackColor = true;
-			this.checkBoxUpload.CheckedChanged += new System.EventHandler(this.checkBoxUpload_CheckedChanged);
 			// 
 			// checkBoxStartup
 			// 
@@ -245,17 +239,27 @@ namespace puush
 			// 
 			// groupBox1
 			// 
+			this.groupBox1.Controls.Add(this.label19);
 			this.groupBox1.Controls.Add(this.panelSaveImage);
+			this.groupBox1.Controls.Add(this.comboBoxClipboardBehaviour);
 			this.groupBox1.Controls.Add(this.checkBoxSaveImage);
-			this.groupBox1.Controls.Add(this.checkBoxClipboard);
 			this.groupBox1.Controls.Add(this.checkBoxBrowser);
 			this.groupBox1.Controls.Add(this.checkBoxSound);
 			this.groupBox1.Location = new System.Drawing.Point(6, 59);
 			this.groupBox1.Name = "groupBox1";
-			this.groupBox1.Size = new System.Drawing.Size(448, 93);
+			this.groupBox1.Size = new System.Drawing.Size(448, 124);
 			this.groupBox1.TabIndex = 1;
 			this.groupBox1.TabStop = false;
 			this.groupBox1.Text = "On successful puush";
+			// 
+			// label19
+			// 
+			this.label19.AutoSize = true;
+			this.label19.Location = new System.Drawing.Point(220, 71);
+			this.label19.Name = "label19";
+			this.label19.Size = new System.Drawing.Size(115, 15);
+			this.label19.TabIndex = 4;
+			this.label19.Text = "Clipboard Behaviour";
 			// 
 			// panelSaveImage
 			// 
@@ -284,6 +288,15 @@ namespace puush
 			this.textBoxSaveLocation.TabIndex = 4;
 			this.textBoxSaveLocation.Leave += new System.EventHandler(this.textBoxSaveLocation_Leave);
 			// 
+			// comboBoxClipboardBehaviour
+			// 
+			this.comboBoxClipboardBehaviour.FormattingEnabled = true;
+			this.comboBoxClipboardBehaviour.Location = new System.Drawing.Point(243, 89);
+			this.comboBoxClipboardBehaviour.Name = "comboBoxClipboardBehaviour";
+			this.comboBoxClipboardBehaviour.Size = new System.Drawing.Size(163, 21);
+			this.comboBoxClipboardBehaviour.TabIndex = 4;
+			this.comboBoxClipboardBehaviour.SelectedIndexChanged += new System.EventHandler(this.comboBoxClipboardBehaviour_SelectedIndexChanged);
+			// 
 			// checkBoxSaveImage
 			// 
 			this.checkBoxSaveImage.AutoSize = true;
@@ -295,21 +308,10 @@ namespace puush
 			this.checkBoxSaveImage.UseVisualStyleBackColor = true;
 			this.checkBoxSaveImage.CheckedChanged += new System.EventHandler(this.checkBoxSaveImage_CheckedChanged);
 			// 
-			// checkBoxClipboard
-			// 
-			this.checkBoxClipboard.AutoSize = true;
-			this.checkBoxClipboard.Location = new System.Drawing.Point(35, 41);
-			this.checkBoxClipboard.Name = "checkBoxClipboard";
-			this.checkBoxClipboard.Size = new System.Drawing.Size(143, 19);
-			this.checkBoxClipboard.TabIndex = 2;
-			this.checkBoxClipboard.Text = "Copy link to clipboard";
-			this.checkBoxClipboard.UseVisualStyleBackColor = true;
-			this.checkBoxClipboard.CheckedChanged += new System.EventHandler(this.checkBoxClipboard_CheckedChanged);
-			// 
 			// checkBoxBrowser
 			// 
 			this.checkBoxBrowser.AutoSize = true;
-			this.checkBoxBrowser.Location = new System.Drawing.Point(35, 64);
+			this.checkBoxBrowser.Location = new System.Drawing.Point(35, 40);
 			this.checkBoxBrowser.Name = "checkBoxBrowser";
 			this.checkBoxBrowser.Size = new System.Drawing.Size(135, 19);
 			this.checkBoxBrowser.TabIndex = 1;
@@ -920,6 +922,38 @@ namespace puush
 			this.qualityBest.UseVisualStyleBackColor = true;
 			this.qualityBest.CheckedChanged += new System.EventHandler(this.qualityBest_CheckedChanged);
 			// 
+			// tabPage6
+			// 
+			this.tabPage6.Controls.Add(this.groupBox9);
+			this.tabPage6.Location = new System.Drawing.Point(4, 22);
+			this.tabPage6.Name = "tabPage6";
+			this.tabPage6.Padding = new System.Windows.Forms.Padding(3);
+			this.tabPage6.Size = new System.Drawing.Size(460, 309);
+			this.tabPage6.TabIndex = 5;
+			this.tabPage6.Text = "Network";
+			this.tabPage6.UseVisualStyleBackColor = true;
+			// 
+			// groupBox9
+			// 
+			this.groupBox9.Controls.Add(this.checkBoxUpload);
+			this.groupBox9.Location = new System.Drawing.Point(6, 6);
+			this.groupBox9.Name = "groupBox9";
+			this.groupBox9.Size = new System.Drawing.Size(448, 60);
+			this.groupBox9.TabIndex = 6;
+			this.groupBox9.TabStop = false;
+			this.groupBox9.Text = "Connection Settings";
+			// 
+			// checkBoxUpload
+			// 
+			this.checkBoxUpload.AutoSize = true;
+			this.checkBoxUpload.Location = new System.Drawing.Point(36, 21);
+			this.checkBoxUpload.Name = "checkBoxUpload";
+			this.checkBoxUpload.Size = new System.Drawing.Size(122, 19);
+			this.checkBoxUpload.TabIndex = 5;
+			this.checkBoxUpload.Text = "Upload to internet";
+			this.checkBoxUpload.UseVisualStyleBackColor = true;
+			this.checkBoxUpload.CheckedChanged += new System.EventHandler(this.checkBoxUpload_CheckedChanged);
+			// 
 			// Settings
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -966,6 +1000,9 @@ namespace puush
 			this.groupBox6.PerformLayout();
 			this.groupBox5.ResumeLayout(false);
 			this.groupBox5.PerformLayout();
+			this.tabPage6.ResumeLayout(false);
+			this.groupBox9.ResumeLayout(false);
+			this.groupBox9.PerformLayout();
 			this.ResumeLayout(false);
 
         }
@@ -991,7 +1028,6 @@ namespace puush
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.TextBox textBoxPassword;
         private System.Windows.Forms.Button button1;
-        private System.Windows.Forms.CheckBox checkBoxClipboard;
         internal System.Windows.Forms.GroupBox groupBoxUpdate;
         private System.Windows.Forms.Button button2;
         private System.Windows.Forms.Label displayApiKey;
@@ -1047,6 +1083,10 @@ namespace puush
         private System.Windows.Forms.GroupBox groupBox8;
         private System.Windows.Forms.CheckBox checkBoxTesting;
         private System.Windows.Forms.CheckBox checkBoxSelectionRectangle;
-        private System.Windows.Forms.CheckBox checkBoxUpload;
-    }
+		private System.Windows.Forms.Label label19;
+		private System.Windows.Forms.ComboBox comboBoxClipboardBehaviour;
+		private System.Windows.Forms.TabPage tabPage6;
+		private System.Windows.Forms.GroupBox groupBox9;
+		private System.Windows.Forms.CheckBox checkBoxUpload;
+	}
 }

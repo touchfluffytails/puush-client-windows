@@ -94,9 +94,10 @@ namespace puush
 
         internal static void Upload(byte[] p, string filename)
         {
+			CopyImageToClipboard(p, filename);
+
 			if (!puush.config.GetValue<bool>("uploadtointernet", true))
 			{
-				CopyImageToClipboard(p, filename);
 				return;
 			}
 
@@ -300,11 +301,15 @@ namespace puush
                             PlaySound(Resources.success, 0, SoundFlags.SND_ASYNC | SoundFlags.SND_MEMORY);
                         }
 
-                        if (puush.config.GetValue<bool>("copytoclipboard", true))
-                            Clipboard.SetText(uploadUrl);
+						if (puush.config.GetValue<int>("clipboardbehaviour", (int)ClipboardBehaviour.Image) == (int)ClipboardBehaviour.Url)
+						{
+							Clipboard.SetText(uploadUrl);
+						}
 
-                        if (puush.config.GetValue<bool>("openbrowser", false))
-                            Process.Start(uploadUrl);
+						if (puush.config.GetValue<bool>("openbrowser", false))
+						{
+							Process.Start(uploadUrl);
+						}
                     }
                     catch { /*yes a lot could happen in here and we should care, right? no.*/ }
                 });
@@ -451,11 +456,13 @@ namespace puush
 
 		internal static void CopyImageToClipboard(byte[] image, string filename)
 		{
-			if (puush.config.GetValue<bool>("saveimages", false))
+			ClipboardBehaviour clipboardBehaviour = (ClipboardBehaviour)puush.config.GetValue<int>("clipboardbehaviour", (int)ClipboardBehaviour.Image);
+
+			if (clipboardBehaviour == ClipboardBehaviour.SavedImagePath)
 			{
 				CopyImageToClipboard(filename);
 			}
-			else
+			else if (clipboardBehaviour == ClipboardBehaviour.Image)
 			{
 				CopyImageToClipboard(image);
 			}

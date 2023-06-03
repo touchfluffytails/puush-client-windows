@@ -35,6 +35,14 @@ namespace puush
         UploadFile
     }
 
+	public enum ClipboardBehaviour
+	{
+		None = 0,
+		Image = 1,
+		Url = 2,
+		SavedImagePath = 3,
+	}
+
     public partial class Settings : pForm
     {
         public static void ShowPreferences()
@@ -114,7 +122,6 @@ namespace puush
 
                 checkBoxBrowser.Checked = puush.config.GetValue<bool>("openbrowser", false);
                 checkBoxSound.Checked = puush.config.GetValue<bool>("notificationsound", true);
-                checkBoxClipboard.Checked = puush.config.GetValue<bool>("copytoclipboard", true);
                 checkBoxStartup.Checked = puush.config.GetValue<bool>("startup", true);
 				checkBoxUpload.Checked = puush.config.GetValue<bool>("uploadtointernet", true);
 
@@ -156,7 +163,10 @@ namespace puush
                 checkBoxTesting.Checked = puush.config.GetValue<bool>("Experimental", false);
                 checkBoxSelectionRectangle.Checked = !puush.config.GetValue<bool>("selectionrectangle", true);
 
-                isReloading = false;
+				comboBoxClipboardBehaviour.DataSource = Enum.GetValues(typeof(ClipboardBehaviour));
+				comboBoxClipboardBehaviour.SelectedItem = (ClipboardBehaviour)puush.config.GetValue<int>("clipboardbehaviour", (int)ClipboardBehaviour.Image);
+
+				isReloading = false;
             });
         }
 
@@ -278,11 +288,6 @@ namespace puush
         private void checkBoxOpenInBrowser_CheckedChanged(object sender, EventArgs e)
         {
             puush.config.SetValue<bool>("openbrowser", checkBoxBrowser.Checked);
-        }
-
-        private void checkBoxClipboard_CheckedChanged(object sender, EventArgs e)
-        {
-            puush.config.SetValue<bool>("copytoclipboard", checkBoxClipboard.Checked);
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -451,5 +456,31 @@ namespace puush
 			puush.config.SetValue<bool>("uploadtointernet", checkBoxUpload.Checked);
 
 		}
-    }
+
+		private void comboBoxClipboardBehaviour_SelectedIndexChanged(object sender, EventArgs e)
+		{
+			if (isReloading)
+			{
+				return;
+			}
+
+			ComboBox comboBox = sender as ComboBox;
+			ClipboardBehaviour selectedBehaviour = (ClipboardBehaviour)comboBox.SelectedItem;
+
+			if (selectedBehaviour == ClipboardBehaviour.SavedImagePath)
+			{
+				// We can't exactly copy the path to something that isn't even set
+				if (!puush.config.GetValue<bool>("saveimages", false) || puush.config.GetValue<string>("saveimagepath", Environment.GetFolderPath(Environment.SpecialFolder.Desktop)) == string.Empty)
+				{
+					string message = "You need to enable saving images and set a path to enable image path clipboard behaviour.";
+					MessageBox.Show(this, message, "Can't set clipboard behaviour!");
+
+					comboBoxClipboardBehaviour.SelectedItem = (ClipboardBehaviour)puush.config.GetValue<int>("clipboardbehaviour", (int)ClipboardBehaviour.Image);
+					return;
+				}
+			}
+
+			puush.config.SetValue<int>("clipboardbehaviour", (int)selectedBehaviour);
+		}
+	}
 }

@@ -11,7 +11,6 @@ using System.Drawing;
 using osu_common.Helpers;
 using System.Drawing.Imaging;
 using System.Collections.Specialized;
-using System.Windows.Forms;
 
 namespace puush
 {
@@ -365,9 +364,18 @@ namespace puush
 				return;
 			}
 
-            filename += string.Format(" ({0:yyyy-MM-dd} at {0:hh.mm.ss})", DateTime.Now);
+			SavedFilenameFormat filenameFormat = (SavedFilenameFormat)puush.config.GetValue<int>("savedfilenameformat", (int)SavedFilenameFormat.TwelveHours);
 
-            UploadQuality quality = (UploadQuality)puush.config.GetValue<int>("uploadquality", (int)UploadQuality.High);
+			if (filenameFormat == SavedFilenameFormat.TwentyfourHours)
+			{
+				filename += string.Format(" ({0:yyyy-MM-dd} at {0:HH.mm.ss})", DateTime.Now);
+			}
+			else
+			{
+				filename += string.Format(" ({0:yyyy-MM-dd} at {0:hh.mm.ss})", DateTime.Now);
+			}
+
+			UploadQuality quality = (UploadQuality)puush.config.GetValue<int>("uploadquality", (int)UploadQuality.High);
             byte[] image = null;
 
             switch (quality)

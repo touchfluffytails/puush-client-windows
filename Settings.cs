@@ -43,6 +43,12 @@ namespace puush
 		SavedImagePath = 3,
 	}
 
+	public enum SavedFilenameFormat
+	{
+		TwelveHours = 0,
+		TwentyfourHours = 1,
+	}
+
     public partial class Settings : pForm
     {
         public static void ShowPreferences()
@@ -165,6 +171,9 @@ namespace puush
 
 				comboBoxClipboardBehaviour.DataSource = Enum.GetValues(typeof(ClipboardBehaviour));
 				comboBoxClipboardBehaviour.SelectedItem = (ClipboardBehaviour)puush.config.GetValue<int>("clipboardbehaviour", (int)ClipboardBehaviour.Image);
+
+				comboBoxSavedFilenameFormat.DataSource = Enum.GetValues(typeof(SavedFilenameFormat));
+				comboBoxSavedFilenameFormat.SelectedItem = (SavedFilenameFormat)puush.config.GetValue<int>("savedfilenameformat", (int)SavedFilenameFormat.TwelveHours);
 
 				listBoxServers.Items.Clear();
 				listBoxServers.Items.AddRange(puush.config.GetArrayValue<string[]>("servers", new string[] { puush.getApiUrl("") }));
@@ -484,6 +493,19 @@ namespace puush
 			}
 
 			puush.config.SetValue<int>("clipboardbehaviour", (int)selectedBehaviour);
+		}
+
+		private void comboBoxSavedFilenameFormat_SelectedIndexChanged(object sender, EventArgs e)
+		{
+			if (isReloading)
+			{
+				return;
+			}
+
+			ComboBox comboBox = sender as ComboBox;
+			SavedFilenameFormat selectedBehaviour = (SavedFilenameFormat)comboBox.SelectedItem;
+
+			puush.config.SetValue<int>("savedfilenameformat", (int)selectedBehaviour);
 		}
 
 		private void buttonServersAdd_Click(object sender, EventArgs e)

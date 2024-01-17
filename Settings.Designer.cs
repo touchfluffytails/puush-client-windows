@@ -40,7 +40,7 @@ namespace puush
 			this.groupBox2 = new System.Windows.Forms.GroupBox();
 			this.checkBoxStartup = new System.Windows.Forms.CheckBox();
 			this.groupBox1 = new System.Windows.Forms.GroupBox();
-			this.label19 = new System.Windows.Forms.Label();
+			this.labelClipboardBehaviour = new System.Windows.Forms.Label();
 			this.panelSaveImage = new System.Windows.Forms.Panel();
 			this.button4 = new System.Windows.Forms.Button();
 			this.textBoxSaveLocation = new System.Windows.Forms.TextBox();
@@ -107,6 +107,7 @@ namespace puush
 			this.qualityBest = new System.Windows.Forms.RadioButton();
 			this.tabPage6 = new System.Windows.Forms.TabPage();
 			this.groupBox10 = new System.Windows.Forms.GroupBox();
+			this.buttonServersCancel = new System.Windows.Forms.Button();
 			this.buttonServersDelete = new System.Windows.Forms.Button();
 			this.buttonServersEdit = new System.Windows.Forms.Button();
 			this.buttonServersAdd = new System.Windows.Forms.Button();
@@ -115,7 +116,8 @@ namespace puush
 			this.groupBox9 = new System.Windows.Forms.GroupBox();
 			this.checkBoxUpload = new System.Windows.Forms.CheckBox();
 			this.folderBrowserDialog1 = new System.Windows.Forms.FolderBrowserDialog();
-			this.buttonServersCancel = new System.Windows.Forms.Button();
+			this.labelSavedFilenameFormat = new System.Windows.Forms.Label();
+			this.comboBoxSavedFilenameFormat = new System.Windows.Forms.ComboBox();
 			this.tabControl1.SuspendLayout();
 			this.tabPage1.SuspendLayout();
 			this.groupBox3.SuspendLayout();
@@ -150,7 +152,7 @@ namespace puush
 			this.tabControl1.Location = new System.Drawing.Point(12, 12);
 			this.tabControl1.Name = "tabControl1";
 			this.tabControl1.SelectedIndex = 0;
-			this.tabControl1.Size = new System.Drawing.Size(468, 335);
+			this.tabControl1.Size = new System.Drawing.Size(468, 360);
 			this.tabControl1.TabIndex = 0;
 			// 
 			// tabPage1
@@ -161,7 +163,7 @@ namespace puush
 			this.tabPage1.Location = new System.Drawing.Point(4, 22);
 			this.tabPage1.Name = "tabPage1";
 			this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
-			this.tabPage1.Size = new System.Drawing.Size(460, 309);
+			this.tabPage1.Size = new System.Drawing.Size(460, 334);
 			this.tabPage1.TabIndex = 0;
 			this.tabPage1.Text = "General";
 			this.tabPage1.UseVisualStyleBackColor = true;
@@ -172,7 +174,7 @@ namespace puush
 			this.groupBox3.Controls.Add(this.radioButton2);
 			this.groupBox3.Controls.Add(this.radioButton1);
 			this.groupBox3.Controls.Add(this.label7);
-			this.groupBox3.Location = new System.Drawing.Point(6, 189);
+			this.groupBox3.Location = new System.Drawing.Point(6, 211);
 			this.groupBox3.Name = "groupBox3";
 			this.groupBox3.Size = new System.Drawing.Size(448, 117);
 			this.groupBox3.TabIndex = 4;
@@ -226,10 +228,12 @@ namespace puush
 			// 
 			// groupBox2
 			// 
+			this.groupBox2.Controls.Add(this.labelSavedFilenameFormat);
+			this.groupBox2.Controls.Add(this.comboBoxSavedFilenameFormat);
 			this.groupBox2.Controls.Add(this.checkBoxStartup);
 			this.groupBox2.Location = new System.Drawing.Point(6, 6);
 			this.groupBox2.Name = "groupBox2";
-			this.groupBox2.Size = new System.Drawing.Size(448, 47);
+			this.groupBox2.Size = new System.Drawing.Size(448, 69);
 			this.groupBox2.TabIndex = 3;
 			this.groupBox2.TabStop = false;
 			this.groupBox2.Text = "General Settings";
@@ -247,27 +251,27 @@ namespace puush
 			// 
 			// groupBox1
 			// 
-			this.groupBox1.Controls.Add(this.label19);
+			this.groupBox1.Controls.Add(this.labelClipboardBehaviour);
 			this.groupBox1.Controls.Add(this.panelSaveImage);
 			this.groupBox1.Controls.Add(this.comboBoxClipboardBehaviour);
 			this.groupBox1.Controls.Add(this.checkBoxSaveImage);
 			this.groupBox1.Controls.Add(this.checkBoxBrowser);
 			this.groupBox1.Controls.Add(this.checkBoxSound);
-			this.groupBox1.Location = new System.Drawing.Point(6, 59);
+			this.groupBox1.Location = new System.Drawing.Point(6, 81);
 			this.groupBox1.Name = "groupBox1";
 			this.groupBox1.Size = new System.Drawing.Size(448, 124);
 			this.groupBox1.TabIndex = 1;
 			this.groupBox1.TabStop = false;
 			this.groupBox1.Text = "On successful puush";
 			// 
-			// label19
+			// labelClipboardBehaviour
 			// 
-			this.label19.AutoSize = true;
-			this.label19.Location = new System.Drawing.Point(220, 71);
-			this.label19.Name = "label19";
-			this.label19.Size = new System.Drawing.Size(115, 15);
-			this.label19.TabIndex = 4;
-			this.label19.Text = "Clipboard Behaviour";
+			this.labelClipboardBehaviour.AutoSize = true;
+			this.labelClipboardBehaviour.Location = new System.Drawing.Point(220, 71);
+			this.labelClipboardBehaviour.Name = "labelClipboardBehaviour";
+			this.labelClipboardBehaviour.Size = new System.Drawing.Size(115, 15);
+			this.labelClipboardBehaviour.TabIndex = 4;
+			this.labelClipboardBehaviour.Text = "Clipboard Behaviour";
 			// 
 			// panelSaveImage
 			// 
@@ -343,7 +347,7 @@ namespace puush
 			this.tabPage4.Controls.Add(this.groupBox4);
 			this.tabPage4.Location = new System.Drawing.Point(4, 22);
 			this.tabPage4.Name = "tabPage4";
-			this.tabPage4.Size = new System.Drawing.Size(460, 309);
+			this.tabPage4.Size = new System.Drawing.Size(460, 334);
 			this.tabPage4.TabIndex = 3;
 			this.tabPage4.Text = "Key Bindings";
 			this.tabPage4.UseVisualStyleBackColor = true;
@@ -493,7 +497,7 @@ namespace puush
 			this.tabPage2.Location = new System.Drawing.Point(4, 22);
 			this.tabPage2.Name = "tabPage2";
 			this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
-			this.tabPage2.Size = new System.Drawing.Size(460, 309);
+			this.tabPage2.Size = new System.Drawing.Size(460, 334);
 			this.tabPage2.TabIndex = 1;
 			this.tabPage2.Text = "Account";
 			this.tabPage2.UseVisualStyleBackColor = true;
@@ -957,6 +961,17 @@ namespace puush
 			this.groupBox10.TabStop = false;
 			this.groupBox10.Text = "Servers";
 			// 
+			// buttonServersCancel
+			// 
+			this.buttonServersCancel.Enabled = false;
+			this.buttonServersCancel.Location = new System.Drawing.Point(367, 80);
+			this.buttonServersCancel.Name = "buttonServersCancel";
+			this.buttonServersCancel.Size = new System.Drawing.Size(75, 23);
+			this.buttonServersCancel.TabIndex = 12;
+			this.buttonServersCancel.Text = "Cancel";
+			this.buttonServersCancel.UseVisualStyleBackColor = true;
+			this.buttonServersCancel.Click += new System.EventHandler(this.buttonServersCancel_Click);
+			// 
 			// buttonServersDelete
 			// 
 			this.buttonServersDelete.Location = new System.Drawing.Point(367, 109);
@@ -1023,22 +1038,29 @@ namespace puush
 			this.checkBoxUpload.UseVisualStyleBackColor = true;
 			this.checkBoxUpload.CheckedChanged += new System.EventHandler(this.checkBoxUpload_CheckedChanged);
 			// 
-			// buttonServersCancel
+			// labelSavedFilenameFormat
 			// 
-			this.buttonServersCancel.Enabled = false;
-			this.buttonServersCancel.Location = new System.Drawing.Point(367, 80);
-			this.buttonServersCancel.Name = "buttonServersCancel";
-			this.buttonServersCancel.Size = new System.Drawing.Size(75, 23);
-			this.buttonServersCancel.TabIndex = 12;
-			this.buttonServersCancel.Text = "Cancel";
-			this.buttonServersCancel.UseVisualStyleBackColor = true;
-			this.buttonServersCancel.Click += new System.EventHandler(this.buttonServersCancel_Click);
+			this.labelSavedFilenameFormat.AutoSize = true;
+			this.labelSavedFilenameFormat.Location = new System.Drawing.Point(220, 23);
+			this.labelSavedFilenameFormat.Name = "labelSavedFilenameFormat";
+			this.labelSavedFilenameFormat.Size = new System.Drawing.Size(130, 15);
+			this.labelSavedFilenameFormat.TabIndex = 5;
+			this.labelSavedFilenameFormat.Text = "Saved Filename Format";
+			// 
+			// comboBoxSavedFilenameFormat
+			// 
+			this.comboBoxSavedFilenameFormat.FormattingEnabled = true;
+			this.comboBoxSavedFilenameFormat.Location = new System.Drawing.Point(243, 40);
+			this.comboBoxSavedFilenameFormat.Name = "comboBoxSavedFilenameFormat";
+			this.comboBoxSavedFilenameFormat.Size = new System.Drawing.Size(163, 21);
+			this.comboBoxSavedFilenameFormat.TabIndex = 6;
+			this.comboBoxSavedFilenameFormat.SelectedIndexChanged += new System.EventHandler(this.comboBoxSavedFilenameFormat_SelectedIndexChanged);
 			// 
 			// Settings
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.ClientSize = new System.Drawing.Size(495, 359);
+			this.ClientSize = new System.Drawing.Size(495, 384);
 			this.Controls.Add(this.tabControl1);
 			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
 			this.Icon = global::puush.Properties.Resources.iconbundle;
@@ -1165,7 +1187,7 @@ namespace puush
         private System.Windows.Forms.GroupBox groupBox8;
         private System.Windows.Forms.CheckBox checkBoxTesting;
         private System.Windows.Forms.CheckBox checkBoxSelectionRectangle;
-		private System.Windows.Forms.Label label19;
+		private System.Windows.Forms.Label labelClipboardBehaviour;
 		private System.Windows.Forms.ComboBox comboBoxClipboardBehaviour;
 		private System.Windows.Forms.TabPage tabPage6;
 		private System.Windows.Forms.GroupBox groupBox9;
@@ -1177,5 +1199,7 @@ namespace puush
 		private System.Windows.Forms.ListBox listBoxServers;
 		private System.Windows.Forms.Button buttonServersDelete;
 		private System.Windows.Forms.Button buttonServersCancel;
+		private System.Windows.Forms.Label labelSavedFilenameFormat;
+		private System.Windows.Forms.ComboBox comboBoxSavedFilenameFormat;
 	}
 }

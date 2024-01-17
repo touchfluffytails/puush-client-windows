@@ -375,6 +375,8 @@ namespace puush
 				filename += string.Format(" ({0:yyyy-MM-dd} at {0:hh.mm.ss})", DateTime.Now);
 			}
 
+			string originalFilename = filename;
+
 			UploadQuality quality = (UploadQuality)puush.config.GetValue<int>("uploadquality", (int)UploadQuality.High);
             byte[] image = null;
 
@@ -455,9 +457,37 @@ namespace puush
             {
                 try
                 {
-                    string filepath = puush.config.GetValue<string>("saveimagepath", "") + "\\" + filename;
+					string savepath = puush.config.GetValue<string>("saveimagepath", "");
+
+					string filepath = Path.Combine(savepath, filename);
                     File.WriteAllBytes(filepath, image);
-                }
+
+					bool saveJxl = puush.config.GetValue<bool>("savejxl", false);
+
+                    if (saveJxl)
+                    {
+						string jxlPath = Path.Combine(savepath, originalFilename + ".jxl");
+						Process jxlExec = new Process();
+						jxlExec.StartInfo.FileName = "cjxl";
+						jxlExec.StartInfo.Arguments = $"\"{filepath}\" -e 9 -d 0.0 \"{jxlPath}\"";
+						jxlExec.StartInfo.UseShellExecute = false;
+						jxlExec.StartInfo.RedirectStandardError = true;
+						jxlExec.StartInfo.RedirectStandardOutput = true;
+						jxlExec.StartInfo.RedirectStandardInput = true;
+						jxlExec.StartInfo.CreateNoWindow = true;
+						jxlExec.Start();
+						jxlExec.WaitForExit();
+
+						if (File.Exists(jxlPath))
+						{
+							bool onlySaveJxl = puush.config.GetValue<bool>("onlysavejxl", false);
+							if (onlySaveJxl)
+							{
+								File.Delete(filepath);
+							}
+						}
+					}
+				}
                 catch { }
             }
 

@@ -175,6 +175,35 @@ namespace puush
 				comboBoxSavedFilenameFormat.DataSource = Enum.GetValues(typeof(SavedFilenameFormat));
 				comboBoxSavedFilenameFormat.SelectedItem = (SavedFilenameFormat)puush.config.GetValue<int>("savedfilenameformat", (int)SavedFilenameFormat.TwelveHours);
 
+				checkBoxSaveJXL.Checked = (bool)puush.config.GetValue<bool>("savejxl", false);
+
+				checkBoxOnlySaveJXL.Checked = (bool)puush.config.GetValue<bool>("onlysavejxl", false);
+
+				if (!checkBoxSaveJXL.Checked)
+				{
+					checkBoxOnlySaveJXL.Checked = false;
+					checkBoxOnlySaveJXL.Enabled = false;
+				}
+
+				Process jxlTest = new Process();
+				try
+				{
+					jxlTest.StartInfo.FileName = "cjxl.exe";
+					jxlTest.Start();
+				}
+				catch (Exception ex)
+				{
+					checkBoxSaveJXL.Checked = false;
+					checkBoxOnlySaveJXL.Checked = false;
+
+					checkBoxSaveJXL.Enabled = false;
+					checkBoxOnlySaveJXL.Enabled = false;
+
+					checkBoxSaveJXL.Visible = false;
+					checkBoxOnlySaveJXL.Visible = false;
+				}
+
+
 				listBoxServers.Items.Clear();
 				listBoxServers.Items.AddRange(puush.config.GetArrayValue<string[]>("servers", new string[] { puush.getApiUrl("") }));
 
@@ -506,6 +535,39 @@ namespace puush
 			SavedFilenameFormat selectedBehaviour = (SavedFilenameFormat)comboBox.SelectedItem;
 
 			puush.config.SetValue<int>("savedfilenameformat", (int)selectedBehaviour);
+		}
+
+		private void checkBoxSaveJXL_CheckedChanged(object sender, EventArgs e)
+		{
+			if (isReloading)
+			{
+				return;
+			}
+
+			CheckBox checkBox = sender as CheckBox;
+			bool checkedBehaviour = checkBox.Checked;
+
+			puush.config.SetValue<bool>("savejxl", checkedBehaviour);
+
+			checkBoxOnlySaveJXL.Enabled = checkedBehaviour;
+			
+			if (!checkedBehaviour)
+			{
+				checkBoxOnlySaveJXL.Checked = false;
+			}
+		}
+
+		private void checkBoxOnlySaveJXL_CheckedChanged(object sender, EventArgs e)
+		{
+			if (isReloading)
+			{
+				return;
+			}
+
+			CheckBox checkBox = sender as CheckBox;
+			bool checkedBehaviour = checkBox.Checked;
+
+			puush.config.SetValue<bool>("onlysavejxl", checkedBehaviour);
 		}
 
 		private void buttonServersAdd_Click(object sender, EventArgs e)

@@ -38,6 +38,8 @@ namespace puush
 			this.radioButton1 = new System.Windows.Forms.RadioButton();
 			this.label7 = new System.Windows.Forms.Label();
 			this.groupBox2 = new System.Windows.Forms.GroupBox();
+			this.labelSavedFilenameFormat = new System.Windows.Forms.Label();
+			this.comboBoxSavedFilenameFormat = new System.Windows.Forms.ComboBox();
 			this.checkBoxStartup = new System.Windows.Forms.CheckBox();
 			this.groupBox1 = new System.Windows.Forms.GroupBox();
 			this.labelClipboardBehaviour = new System.Windows.Forms.Label();
@@ -116,8 +118,8 @@ namespace puush
 			this.groupBox9 = new System.Windows.Forms.GroupBox();
 			this.checkBoxUpload = new System.Windows.Forms.CheckBox();
 			this.folderBrowserDialog1 = new System.Windows.Forms.FolderBrowserDialog();
-			this.labelSavedFilenameFormat = new System.Windows.Forms.Label();
-			this.comboBoxSavedFilenameFormat = new System.Windows.Forms.ComboBox();
+			this.checkBoxSaveJXL = new System.Windows.Forms.CheckBox();
+			this.checkBoxOnlySaveJXL = new System.Windows.Forms.CheckBox();
 			this.tabControl1.SuspendLayout();
 			this.tabPage1.SuspendLayout();
 			this.groupBox3.SuspendLayout();
@@ -237,6 +239,24 @@ namespace puush
 			this.groupBox2.TabIndex = 3;
 			this.groupBox2.TabStop = false;
 			this.groupBox2.Text = "General Settings";
+			// 
+			// labelSavedFilenameFormat
+			// 
+			this.labelSavedFilenameFormat.AutoSize = true;
+			this.labelSavedFilenameFormat.Location = new System.Drawing.Point(220, 23);
+			this.labelSavedFilenameFormat.Name = "labelSavedFilenameFormat";
+			this.labelSavedFilenameFormat.Size = new System.Drawing.Size(130, 15);
+			this.labelSavedFilenameFormat.TabIndex = 5;
+			this.labelSavedFilenameFormat.Text = "Saved Filename Format";
+			// 
+			// comboBoxSavedFilenameFormat
+			// 
+			this.comboBoxSavedFilenameFormat.FormattingEnabled = true;
+			this.comboBoxSavedFilenameFormat.Location = new System.Drawing.Point(243, 40);
+			this.comboBoxSavedFilenameFormat.Name = "comboBoxSavedFilenameFormat";
+			this.comboBoxSavedFilenameFormat.Size = new System.Drawing.Size(163, 21);
+			this.comboBoxSavedFilenameFormat.TabIndex = 6;
+			this.comboBoxSavedFilenameFormat.SelectedIndexChanged += new System.EventHandler(this.comboBoxSavedFilenameFormat_SelectedIndexChanged);
 			// 
 			// checkBoxStartup
 			// 
@@ -740,7 +760,7 @@ namespace puush
 			this.tabPage3.Controls.Add(this.groupBoxUpdate);
 			this.tabPage3.Location = new System.Drawing.Point(4, 22);
 			this.tabPage3.Name = "tabPage3";
-			this.tabPage3.Size = new System.Drawing.Size(460, 309);
+			this.tabPage3.Size = new System.Drawing.Size(460, 334);
 			this.tabPage3.TabIndex = 2;
 			this.tabPage3.Text = "Updates";
 			this.tabPage3.UseVisualStyleBackColor = true;
@@ -794,7 +814,7 @@ namespace puush
 			this.tabPage5.Location = new System.Drawing.Point(4, 22);
 			this.tabPage5.Name = "tabPage5";
 			this.tabPage5.Padding = new System.Windows.Forms.Padding(3);
-			this.tabPage5.Size = new System.Drawing.Size(460, 309);
+			this.tabPage5.Size = new System.Drawing.Size(460, 334);
 			this.tabPage5.TabIndex = 4;
 			this.tabPage5.Text = "Advanced";
 			this.tabPage5.UseVisualStyleBackColor = true;
@@ -803,7 +823,7 @@ namespace puush
 			// 
 			this.groupBox8.Controls.Add(this.checkBoxSelectionRectangle);
 			this.groupBox8.Controls.Add(this.checkBoxTesting);
-			this.groupBox8.Location = new System.Drawing.Point(6, 214);
+			this.groupBox8.Location = new System.Drawing.Point(6, 245);
 			this.groupBox8.Name = "groupBox8";
 			this.groupBox8.Size = new System.Drawing.Size(448, 83);
 			this.groupBox8.TabIndex = 7;
@@ -837,7 +857,7 @@ namespace puush
 			this.groupBox7.Controls.Add(this.fullscreenPrimary);
 			this.groupBox7.Controls.Add(this.fullscreenCursor);
 			this.groupBox7.Controls.Add(this.fullscreenAllScreens);
-			this.groupBox7.Location = new System.Drawing.Point(6, 130);
+			this.groupBox7.Location = new System.Drawing.Point(6, 156);
 			this.groupBox7.Name = "groupBox7";
 			this.groupBox7.Size = new System.Drawing.Size(448, 83);
 			this.groupBox7.TabIndex = 7;
@@ -881,7 +901,7 @@ namespace puush
 			// groupBox6
 			// 
 			this.groupBox6.Controls.Add(this.checkBoxContextMenu);
-			this.groupBox6.Location = new System.Drawing.Point(6, 77);
+			this.groupBox6.Location = new System.Drawing.Point(6, 98);
 			this.groupBox6.Name = "groupBox6";
 			this.groupBox6.Size = new System.Drawing.Size(448, 52);
 			this.groupBox6.TabIndex = 6;
@@ -901,11 +921,13 @@ namespace puush
 			// 
 			// groupBox5
 			// 
+			this.groupBox5.Controls.Add(this.checkBoxOnlySaveJXL);
+			this.groupBox5.Controls.Add(this.checkBoxSaveJXL);
 			this.groupBox5.Controls.Add(this.qualityHigh);
 			this.groupBox5.Controls.Add(this.qualityBest);
 			this.groupBox5.Location = new System.Drawing.Point(6, 6);
 			this.groupBox5.Name = "groupBox5";
-			this.groupBox5.Size = new System.Drawing.Size(448, 70);
+			this.groupBox5.Size = new System.Drawing.Size(448, 86);
 			this.groupBox5.TabIndex = 4;
 			this.groupBox5.TabStop = false;
 			this.groupBox5.Text = "Screen Capture Quality";
@@ -941,7 +963,7 @@ namespace puush
 			this.tabPage6.Location = new System.Drawing.Point(4, 22);
 			this.tabPage6.Name = "tabPage6";
 			this.tabPage6.Padding = new System.Windows.Forms.Padding(3);
-			this.tabPage6.Size = new System.Drawing.Size(460, 309);
+			this.tabPage6.Size = new System.Drawing.Size(460, 334);
 			this.tabPage6.TabIndex = 5;
 			this.tabPage6.Text = "Network";
 			this.tabPage6.UseVisualStyleBackColor = true;
@@ -1038,23 +1060,27 @@ namespace puush
 			this.checkBoxUpload.UseVisualStyleBackColor = true;
 			this.checkBoxUpload.CheckedChanged += new System.EventHandler(this.checkBoxUpload_CheckedChanged);
 			// 
-			// labelSavedFilenameFormat
+			// checkBoxSaveJXL
 			// 
-			this.labelSavedFilenameFormat.AutoSize = true;
-			this.labelSavedFilenameFormat.Location = new System.Drawing.Point(220, 23);
-			this.labelSavedFilenameFormat.Name = "labelSavedFilenameFormat";
-			this.labelSavedFilenameFormat.Size = new System.Drawing.Size(130, 15);
-			this.labelSavedFilenameFormat.TabIndex = 5;
-			this.labelSavedFilenameFormat.Text = "Saved Filename Format";
+			this.checkBoxSaveJXL.AutoSize = true;
+			this.checkBoxSaveJXL.Location = new System.Drawing.Point(17, 67);
+			this.checkBoxSaveJXL.Name = "checkBoxSaveJXL";
+			this.checkBoxSaveJXL.Size = new System.Drawing.Size(109, 19);
+			this.checkBoxSaveJXL.TabIndex = 1;
+			this.checkBoxSaveJXL.Text = "Also save as JXL";
+			this.checkBoxSaveJXL.UseVisualStyleBackColor = true;
+			this.checkBoxSaveJXL.CheckedChanged += new System.EventHandler(this.checkBoxSaveJXL_CheckedChanged);
 			// 
-			// comboBoxSavedFilenameFormat
+			// checkBoxOnlySaveJXL
 			// 
-			this.comboBoxSavedFilenameFormat.FormattingEnabled = true;
-			this.comboBoxSavedFilenameFormat.Location = new System.Drawing.Point(243, 40);
-			this.comboBoxSavedFilenameFormat.Name = "comboBoxSavedFilenameFormat";
-			this.comboBoxSavedFilenameFormat.Size = new System.Drawing.Size(163, 21);
-			this.comboBoxSavedFilenameFormat.TabIndex = 6;
-			this.comboBoxSavedFilenameFormat.SelectedIndexChanged += new System.EventHandler(this.comboBoxSavedFilenameFormat_SelectedIndexChanged);
+			this.checkBoxOnlySaveJXL.AutoSize = true;
+			this.checkBoxOnlySaveJXL.Location = new System.Drawing.Point(147, 67);
+			this.checkBoxOnlySaveJXL.Name = "checkBoxOnlySaveJXL";
+			this.checkBoxOnlySaveJXL.Size = new System.Drawing.Size(111, 19);
+			this.checkBoxOnlySaveJXL.TabIndex = 6;
+			this.checkBoxOnlySaveJXL.Text = "Only save as JXL";
+			this.checkBoxOnlySaveJXL.UseVisualStyleBackColor = true;
+			this.checkBoxOnlySaveJXL.CheckedChanged += new System.EventHandler(this.checkBoxOnlySaveJXL_CheckedChanged);
 			// 
 			// Settings
 			// 
@@ -1201,5 +1227,7 @@ namespace puush
 		private System.Windows.Forms.Button buttonServersCancel;
 		private System.Windows.Forms.Label labelSavedFilenameFormat;
 		private System.Windows.Forms.ComboBox comboBoxSavedFilenameFormat;
+		private System.Windows.Forms.CheckBox checkBoxOnlySaveJXL;
+		private System.Windows.Forms.CheckBox checkBoxSaveJXL;
 	}
 }

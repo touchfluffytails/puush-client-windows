@@ -105,6 +105,8 @@ namespace puush
 			this.groupBox6 = new System.Windows.Forms.GroupBox();
 			this.checkBoxContextMenu = new System.Windows.Forms.CheckBox();
 			this.groupBox5 = new System.Windows.Forms.GroupBox();
+			this.checkBoxOnlySaveJXL = new System.Windows.Forms.CheckBox();
+			this.checkBoxSaveJXL = new System.Windows.Forms.CheckBox();
 			this.qualityHigh = new System.Windows.Forms.RadioButton();
 			this.qualityBest = new System.Windows.Forms.RadioButton();
 			this.tabPage6 = new System.Windows.Forms.TabPage();
@@ -118,8 +120,8 @@ namespace puush
 			this.groupBox9 = new System.Windows.Forms.GroupBox();
 			this.checkBoxUpload = new System.Windows.Forms.CheckBox();
 			this.folderBrowserDialog1 = new System.Windows.Forms.FolderBrowserDialog();
-			this.checkBoxSaveJXL = new System.Windows.Forms.CheckBox();
-			this.checkBoxOnlySaveJXL = new System.Windows.Forms.CheckBox();
+			this.labelHistoryCount = new System.Windows.Forms.Label();
+			this.numericUpDownHistorySize = new System.Windows.Forms.NumericUpDown();
 			this.tabControl1.SuspendLayout();
 			this.tabPage1.SuspendLayout();
 			this.groupBox3.SuspendLayout();
@@ -141,6 +143,7 @@ namespace puush
 			this.tabPage6.SuspendLayout();
 			this.groupBox10.SuspendLayout();
 			this.groupBox9.SuspendLayout();
+			((System.ComponentModel.ISupportInitialize)(this.numericUpDownHistorySize)).BeginInit();
 			this.SuspendLayout();
 			// 
 			// tabControl1
@@ -230,6 +233,8 @@ namespace puush
 			// 
 			// groupBox2
 			// 
+			this.groupBox2.Controls.Add(this.numericUpDownHistorySize);
+			this.groupBox2.Controls.Add(this.labelHistoryCount);
 			this.groupBox2.Controls.Add(this.labelSavedFilenameFormat);
 			this.groupBox2.Controls.Add(this.comboBoxSavedFilenameFormat);
 			this.groupBox2.Controls.Add(this.checkBoxStartup);
@@ -932,6 +937,28 @@ namespace puush
 			this.groupBox5.TabStop = false;
 			this.groupBox5.Text = "Screen Capture Quality";
 			// 
+			// checkBoxOnlySaveJXL
+			// 
+			this.checkBoxOnlySaveJXL.AutoSize = true;
+			this.checkBoxOnlySaveJXL.Location = new System.Drawing.Point(147, 67);
+			this.checkBoxOnlySaveJXL.Name = "checkBoxOnlySaveJXL";
+			this.checkBoxOnlySaveJXL.Size = new System.Drawing.Size(111, 19);
+			this.checkBoxOnlySaveJXL.TabIndex = 6;
+			this.checkBoxOnlySaveJXL.Text = "Only save as JXL";
+			this.checkBoxOnlySaveJXL.UseVisualStyleBackColor = true;
+			this.checkBoxOnlySaveJXL.CheckedChanged += new System.EventHandler(this.checkBoxOnlySaveJXL_CheckedChanged);
+			// 
+			// checkBoxSaveJXL
+			// 
+			this.checkBoxSaveJXL.AutoSize = true;
+			this.checkBoxSaveJXL.Location = new System.Drawing.Point(17, 67);
+			this.checkBoxSaveJXL.Name = "checkBoxSaveJXL";
+			this.checkBoxSaveJXL.Size = new System.Drawing.Size(109, 19);
+			this.checkBoxSaveJXL.TabIndex = 1;
+			this.checkBoxSaveJXL.Text = "Also save as JXL";
+			this.checkBoxSaveJXL.UseVisualStyleBackColor = true;
+			this.checkBoxSaveJXL.CheckedChanged += new System.EventHandler(this.checkBoxSaveJXL_CheckedChanged);
+			// 
 			// qualityHigh
 			// 
 			this.qualityHigh.AutoSize = true;
@@ -1060,27 +1087,22 @@ namespace puush
 			this.checkBoxUpload.UseVisualStyleBackColor = true;
 			this.checkBoxUpload.CheckedChanged += new System.EventHandler(this.checkBoxUpload_CheckedChanged);
 			// 
-			// checkBoxSaveJXL
+			// labelHistoryCount
 			// 
-			this.checkBoxSaveJXL.AutoSize = true;
-			this.checkBoxSaveJXL.Location = new System.Drawing.Point(17, 67);
-			this.checkBoxSaveJXL.Name = "checkBoxSaveJXL";
-			this.checkBoxSaveJXL.Size = new System.Drawing.Size(109, 19);
-			this.checkBoxSaveJXL.TabIndex = 1;
-			this.checkBoxSaveJXL.Text = "Also save as JXL";
-			this.checkBoxSaveJXL.UseVisualStyleBackColor = true;
-			this.checkBoxSaveJXL.CheckedChanged += new System.EventHandler(this.checkBoxSaveJXL_CheckedChanged);
+			this.labelHistoryCount.AutoSize = true;
+			this.labelHistoryCount.Location = new System.Drawing.Point(33, 43);
+			this.labelHistoryCount.Name = "labelHistoryCount";
+			this.labelHistoryCount.Size = new System.Drawing.Size(71, 15);
+			this.labelHistoryCount.TabIndex = 7;
+			this.labelHistoryCount.Text = "History Size:";
 			// 
-			// checkBoxOnlySaveJXL
+			// numericUpDownHistorySize
 			// 
-			this.checkBoxOnlySaveJXL.AutoSize = true;
-			this.checkBoxOnlySaveJXL.Location = new System.Drawing.Point(147, 67);
-			this.checkBoxOnlySaveJXL.Name = "checkBoxOnlySaveJXL";
-			this.checkBoxOnlySaveJXL.Size = new System.Drawing.Size(111, 19);
-			this.checkBoxOnlySaveJXL.TabIndex = 6;
-			this.checkBoxOnlySaveJXL.Text = "Only save as JXL";
-			this.checkBoxOnlySaveJXL.UseVisualStyleBackColor = true;
-			this.checkBoxOnlySaveJXL.CheckedChanged += new System.EventHandler(this.checkBoxOnlySaveJXL_CheckedChanged);
+			this.numericUpDownHistorySize.Location = new System.Drawing.Point(110, 41);
+			this.numericUpDownHistorySize.Name = "numericUpDownHistorySize";
+			this.numericUpDownHistorySize.Size = new System.Drawing.Size(60, 20);
+			this.numericUpDownHistorySize.TabIndex = 8;
+			this.numericUpDownHistorySize.ValueChanged += new System.EventHandler(this.numericUpDownHistorySize_ValueChanged);
 			// 
 			// Settings
 			// 
@@ -1133,6 +1155,7 @@ namespace puush
 			this.groupBox10.PerformLayout();
 			this.groupBox9.ResumeLayout(false);
 			this.groupBox9.PerformLayout();
+			((System.ComponentModel.ISupportInitialize)(this.numericUpDownHistorySize)).EndInit();
 			this.ResumeLayout(false);
 
         }
@@ -1229,5 +1252,7 @@ namespace puush
 		private System.Windows.Forms.ComboBox comboBoxSavedFilenameFormat;
 		private System.Windows.Forms.CheckBox checkBoxOnlySaveJXL;
 		private System.Windows.Forms.CheckBox checkBoxSaveJXL;
+		private System.Windows.Forms.NumericUpDown numericUpDownHistorySize;
+		private System.Windows.Forms.Label labelHistoryCount;
 	}
 }

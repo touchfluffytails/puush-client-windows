@@ -25,6 +25,8 @@ namespace puush
 
         public static DockedPanel panel;
 
+
+
 		public MainForm()
 		{
 			InitializeComponent();
@@ -72,12 +74,17 @@ namespace puush
 			}
 			catch { }
 
-			if (puush.config.GetValue<bool>("uploadtointernet", true))
-			{ 
+			bool uploadInternet = puush.config.GetValue<bool>("uploadtointernet", true);
+			if (!uploadInternet)
+			{
+				HistoryManager.Update(string.Empty);
+			}
+			else
+			{
 				HistoryManager.Update();
 			}
 
-            if (puush.RecoveringFromError)
+			if (puush.RecoveringFromError)
                 puush.ShowErrorBalloon("This has been reported automatically.\nSorry for any inconvenience", "puush has just recovered from an error.");
 
         }

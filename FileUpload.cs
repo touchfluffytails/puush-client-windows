@@ -11,13 +11,13 @@ using System.Drawing;
 using osu_common.Helpers;
 using System.Drawing.Imaging;
 using System.Collections.Specialized;
+using System.Threading;
 
 namespace puush
 {
     internal static class FileUpload
     {
-
-        [DllImport("winmm.dll")]
+		[DllImport("winmm.dll")]
         internal static extern bool PlaySound(string filename, int module, SoundFlags flags);
 
         [DllImport("winmm.dll", SetLastError = true)]
@@ -97,6 +97,9 @@ namespace puush
 
 			if (!puush.config.GetValue<bool>("uploadtointernet", true))
 			{
+				string filepath = Path.Combine(puush.config.GetValue<string>("saveimagepath", ""), filename);
+
+				HistoryManager.Update(filepath);
 				return;
 			}
 
@@ -205,103 +208,105 @@ namespace puush
 
         static int retryCount;
 
-        static void fileUpload_onFinish(string _result, Exception e)
-        {
-            string[] split = null;
+		static void fileUpload_onFinish(string _result, Exception e)
+		{
+			string[] split = null;
 
-            int response = -2; //unknown error
+			int response = -2; //unknown error
 
-            if (e == null && !string.IsNullOrEmpty(_result))
-            {
-                split = _result.Split(',');
+			if (e == null && !string.IsNullOrEmpty(_result))
+			{
+				split = _result.Split(',');
 
-                if (!Int32.TryParse(split[0], out response))
-                    response = -2;
+				if (!Int32.TryParse(split[0], out response))
+					response = -2;
 
-                long usage = Int64.Parse(split[3]);
-                puush.config.SetValue<long>("usage", usage);
-            }
+				long usage = Int64.Parse(split[3]);
+				puush.config.SetValue<long>("usage", usage);
+			}
 
-            if (e is AbortedException)
-            {
-                //early exit
-                CurrentUpload = null;
-                puush.UploadCancellable = false;
-                ProcessQueue();
+			if (e is AbortedException)
+			{
+				//early exit
+				CurrentUpload = null;
+				puush.UploadCancellable = false;
+				ProcessQueue();
 
-                MainForm.SetTrayIcon(Resources.tray, "puush");
+				MainForm.SetTrayIcon(Resources.tray, "puush");
 
-                MainForm.panel.FinishUpload(null, null);
+				MainForm.panel.FinishUpload(null, null);
 
-                return;
-            }
+				return;
+			}
 
-            bool shouldRetry = false;
+			bool shouldRetry = false;
 
-            if (response < 0)
-            {
-                string errorDescription;
-                //handle errors
-                switch (response)
-                {
-                    case -1:
-                        errorDescription = "Authentication failure";
-                        puush.HandleInvalidAuthentication();
-                        break;
-                    case -2:
-                    default:
-                        errorDescription = "Connection error";
-                        shouldRetry = true;
-                        break;
-                    case -3:
-                        errorDescription = "Checksum error";
-                        shouldRetry = true;
-                        break;
-                    case -4:
-                        errorDescription = "Insufficient account storage remaining. Please delete some files or consider upgrading to a pro account!";
-                        shouldRetry = false;
-                        break;
-                }
+			if (response < 0)
+			{
+				string errorDescription;
+				//handle errors
+				switch (response)
+				{
+					case -1:
+						errorDescription = "Authentication failure";
+						puush.HandleInvalidAuthentication();
+						break;
+					case -2:
+					default:
+						errorDescription = "Connection error";
+						shouldRetry = true;
+						break;
+					case -3:
+						errorDescription = "Checksum error";
+						shouldRetry = true;
+						break;
+					case -4:
+						errorDescription = "Insufficient account storage remaining. Please delete some files or consider upgrading to a pro account!";
+						shouldRetry = false;
+						break;
+				}
 
-                if (shouldRetry && retryCount > 0)
-                {
-                    retryCount--;
-                    errorDescription += " - Retrying " + retryCount + " more times...";
+				if (shouldRetry && retryCount > 0)
+				{
+					retryCount--;
+					errorDescription += " - Retrying " + retryCount + " more times...";
 
-                    NetManager.AddRequest(CurrentUpload);
-                }
-                else
-                {
-                    CurrentUpload = null;
-                    ProcessQueue();
-                }
+					NetManager.AddRequest(CurrentUpload);
+				}
+				else
+				{
+					CurrentUpload = null;
+					ProcessQueue();
+				}
 
-                if (MainForm.panel != null) MainForm.panel.FinishUpload(null, null);
-                puush.ShowErrorBalloon(errorDescription);
+				if (MainForm.panel != null) MainForm.panel.FinishUpload(null, null);
+				puush.ShowErrorBalloon(errorDescription);
 
-                return;
-            }
+				return;
+			}
 
-            HistoryManager.Update();
 
-            string uploadUrl = split[1];
-            if (MainForm.panel != null) MainForm.panel.FinishUpload(uploadUrl, CurrentUpload);
+			HistoryManager.Update();
 
-            if (uploadUrl.Length > 0)
-            {
-                MainForm.SetTrayIcon(Resources.complete, "puush: upload complete!", 2000);
 
-                MainForm.Instance.Invoke((MethodInvoker)delegate
-                {
-                    try
-                    {
-                        MainForm.Instance.trayIcon.ShowBalloonTip(5000, "puush complete!", uploadUrl, ToolTipIcon.Info);
-                        MainForm.Instance.trayIcon.Tag = uploadUrl;
+			string uploadUrl = split[1];
+			if (MainForm.panel != null) MainForm.panel.FinishUpload(uploadUrl, CurrentUpload);
 
-                        if (puush.config.GetValue<bool>("notificationsound", true))
-                        {
-                            PlaySound(Resources.success, 0, SoundFlags.SND_ASYNC | SoundFlags.SND_MEMORY);
-                        }
+			if (uploadUrl.Length > 0)
+			{
+				MainForm.SetTrayIcon(Resources.complete, "puush: upload complete!", 2000);
+
+				MainForm.Instance.Invoke((MethodInvoker)delegate
+				{
+					try
+					{
+						MainForm.Instance.trayIcon.ShowBalloonTip(5000, "puush complete!", uploadUrl, ToolTipIcon.Info);
+						MainForm.Instance.trayIcon.Tag = uploadUrl;
+
+						if (puush.config.GetValue<bool>("notificationsound", true))
+						{
+							PlaySound(Resources.success, 0, SoundFlags.SND_ASYNC | SoundFlags.SND_MEMORY);
+						}
 
 						if (puush.config.GetValue<int>("clipboardbehaviour", (int)ClipboardBehaviour.Image) == (int)ClipboardBehaviour.Url)
 						{
@@ -312,16 +317,16 @@ namespace puush
 						{
 							Process.Start(uploadUrl);
 						}
-                    }
-                    catch { /*yes a lot could happen in here and we should care, right? no.*/ }
-                });
-            }
+					}
+					catch { /*yes a lot could happen in here and we should care, right? no.*/ }
+				});
+			}
 
-            CurrentUpload = null;
-            puush.UploadCancellable = false;
+			CurrentUpload = null;
+			puush.UploadCancellable = false;
 
-            ProcessQueue();
-        }
+			ProcessQueue();
+		}
 
         internal static void CancelCurrent()
         {
@@ -461,39 +466,57 @@ namespace puush
 
 					string filepath = Path.Combine(savepath, filename);
                     File.WriteAllBytes(filepath, image);
-
-					bool saveJxl = puush.config.GetValue<bool>("savejxl", false);
-
-                    if (saveJxl)
-                    {
-						string jxlPath = Path.Combine(savepath, originalFilename + ".jxl");
-						Process jxlExec = new Process();
-						jxlExec.StartInfo.FileName = "cjxl";
-						jxlExec.StartInfo.Arguments = $"\"{filepath}\" -e 9 -d 0.0 \"{jxlPath}\"";
-						jxlExec.StartInfo.UseShellExecute = false;
-						jxlExec.StartInfo.RedirectStandardError = true;
-						jxlExec.StartInfo.RedirectStandardOutput = true;
-						jxlExec.StartInfo.RedirectStandardInput = true;
-						jxlExec.StartInfo.CreateNoWindow = true;
-						jxlExec.Start();
-						jxlExec.WaitForExit();
-
-						if (File.Exists(jxlPath))
-						{
-							bool onlySaveJxl = puush.config.GetValue<bool>("onlysavejxl", false);
-							if (onlySaveJxl)
-							{
-								File.Delete(filepath);
-							}
-						}
-					}
 				}
                 catch { }
             }
 
             if (image != null)
-                FileUpload.Upload(image, filename);
-        }
+			{
+				FileUpload.Upload(image, filename);
+			}
+
+			bool saveJxl = puush.config.GetValue<bool>("savejxl", false);
+
+			if (saveJxl)
+			{
+				ThreadPool.QueueUserWorkItem(state => SaveJxl(filename, originalFilename));
+			}
+		}
+
+		private static void SaveJxl(string filename, string originalFilename)
+		{
+			try
+			{
+				string savepath = puush.config.GetValue<string>("saveimagepath", "");
+				string filepath = Path.Combine(savepath, filename);
+
+				string jxlPath = Path.Combine(savepath, originalFilename + ".jxl");
+				Process jxlExec = new Process();
+				jxlExec.StartInfo.FileName = "cjxl";
+				jxlExec.StartInfo.Arguments = $"\"{filepath}\" -e 9 -d 0.0 \"{jxlPath}\"";
+				jxlExec.StartInfo.UseShellExecute = false;
+				jxlExec.StartInfo.RedirectStandardError = true;
+				jxlExec.StartInfo.RedirectStandardOutput = true;
+				jxlExec.StartInfo.RedirectStandardInput = true;
+				jxlExec.StartInfo.CreateNoWindow = true;
+				jxlExec.Start();
+				jxlExec.WaitForExit();
+
+				if (File.Exists(jxlPath))
+				{
+					byte[] image = File.ReadAllBytes(jxlPath);
+
+					FileUpload.Upload(image, filename);
+
+					bool onlySaveJxl = puush.config.GetValue<bool>("onlysavejxl", false);
+					if (onlySaveJxl)
+					{
+						File.Delete(filepath);
+					}
+				}
+			}
+			catch { }
+		}
 
 		internal static void CopyImageToClipboard(byte[] image, string filename)
 		{

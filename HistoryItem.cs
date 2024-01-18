@@ -73,16 +73,70 @@ namespace puush
         {
             if (!thumbnailLoaded)
             {
-                thumbnailLoaded = true;
+				bool uploadInternet = puush.config.GetValue<bool>("uploadtointernet", true);
 
-                FormDataNetRequest request = new FormDataNetRequest(puush.getApiUrl("thumb"));
-                request.request.Items.AddFormField("k", puush.config.GetValue<string>("key", ""));
-                request.request.Items.AddFormField("i", id.ToString());
-                request.onFinish += new FormDataNetRequest.RequestCompleteHandler(request_onFinish);
+				if (!uploadInternet)
+				{
+					HandleOfflineDropDownOpening();
+				}
+				else
+				{
+					HandleOnlineDropDownOpening();
+				}
+			}
+		}
 
-                NetManager.AddRequest(request);
-            }
-        }
+		private void HandleOfflineDropDownOpening()
+		{
+			thumbnailLoaded = true;
+
+			if (!File.Exists(this.url))
+			{
+				return;
+			}
+			Image imageLoad = Image.FromFile(this.url);
+			Image thumbImage = imageLoad.GetThumbnailImage(120, 120, null, IntPtr.Zero);
+
+			byte[] thumb = null;
+
+			using (MemoryStream ms = new MemoryStream())
+			{
+				thumbImage.Save(ms, imageLoad.RawFormat);
+				thumb = ms.ToArray(); 
+			}
+
+			if (thumb.Length > 0)
+			{
+				MainForm.invokeMeSome(delegate
+				{
+					try
+					{
+						Image image = Image.FromStream(new MemoryStream(thumb), false, false);
+
+						ToolStripItemThumbnail item = new ToolStripItemThumbnail(image, Width);
+						item.Click += OpenURL;
+
+						DropDownItems.Insert(0, item);
+					}
+					catch
+					{
+						//getting here means the image we downloaded is likely no an image or corrupt. ignore.
+					}
+				});
+			}
+		}
+
+		private void HandleOnlineDropDownOpening()
+		{
+			thumbnailLoaded = true;
+
+			FormDataNetRequest request = new FormDataNetRequest(puush.getApiUrl("thumb"));
+			request.request.Items.AddFormField("k", puush.config.GetValue<string>("key", ""));
+			request.request.Items.AddFormField("i", id.ToString());
+			request.onFinish += new FormDataNetRequest.RequestCompleteHandler(request_onFinish);
+
+			NetManager.AddRequest(request);
+		}
 
         void request_onFinish(byte[] thumb, Exception e)
         {

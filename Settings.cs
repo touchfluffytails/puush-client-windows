@@ -203,9 +203,10 @@ namespace puush
 					checkBoxOnlySaveJXL.Visible = false;
 				}
 
-
 				listBoxServers.Items.Clear();
 				listBoxServers.Items.AddRange(puush.config.GetArrayValue<string[]>("servers", new string[] { puush.getApiUrl("") }));
+
+				numericUpDownHistorySize.Value = puush.config.GetValue<int>("historysize", 5);
 
 				isReloading = false;
             });
@@ -535,6 +536,19 @@ namespace puush
 			SavedFilenameFormat selectedBehaviour = (SavedFilenameFormat)comboBox.SelectedItem;
 
 			puush.config.SetValue<int>("savedfilenameformat", (int)selectedBehaviour);
+		}
+
+		private void numericUpDownHistorySize_ValueChanged(object sender, EventArgs e)
+		{
+			if (isReloading)
+			{
+				return;
+			}
+
+			NumericUpDown numericUpDown = sender as NumericUpDown;
+			int size = (int)numericUpDown.Value;
+
+			puush.config.SetValue<int>("historysize", size);
 		}
 
 		private void checkBoxSaveJXL_CheckedChanged(object sender, EventArgs e)
